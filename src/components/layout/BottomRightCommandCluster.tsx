@@ -28,25 +28,8 @@ export const BottomRightCommandCluster = () => {
 
   return (
     <div className="absolute bottom-5 right-4 z-20 w-[360px]">
-      <OrnatePanel subtitle="Mini-map, layers, filters, zoom, and horizon playback." title="Command Cluster" tone="hero">
+      <OrnatePanel subtitle="Mini-map, layers, filters, zoom, and horizon playback." title="Command Cluster">
         <div className="space-y-4 px-4 py-4">
-          <div className="grid grid-cols-3 gap-3">
-            <div className="feature-card">
-              <div className="feature-card__label">Time Horizon</div>
-              <div className="feature-card__value text-base">{scenario.visualSettings.timeHorizon}</div>
-            </div>
-            <div className="feature-card">
-              <div className="feature-card__label">Filters</div>
-              <div className="feature-card__value text-base">
-                {Object.entries(scenario.filters).filter(([, value]) => value).length}
-              </div>
-            </div>
-            <div className="feature-card">
-              <div className="feature-card__label">Playback</div>
-              <div className="feature-card__value text-base">{playing ? 'Running' : 'Paused'}</div>
-            </div>
-          </div>
-
           <MiniMap />
           <div className="grid grid-cols-2 gap-2">
             <button className="command-pill" onClick={() => zoomIn()} type="button">
@@ -76,7 +59,7 @@ export const BottomRightCommandCluster = () => {
           </div>
 
           {filtersOpen ? (
-            <div className="grid grid-cols-2 gap-2 rounded-[24px] border border-brass/15 bg-black/18 p-3">
+            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-brass/15 bg-black/18 p-3">
               {[
                 ['operationsOnly', 'Operations'],
                 ['liquidityOnly', 'Liquidity'],
@@ -94,7 +77,7 @@ export const BottomRightCommandCluster = () => {
           ) : null}
 
           {layersOpen ? (
-            <div className="grid grid-cols-2 gap-2 rounded-[24px] border border-brass/15 bg-black/18 p-3">
+            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-brass/15 bg-black/18 p-3">
               {[
                 ['showBackgroundMap', 'Background map'],
                 ['showCountryLabels', 'Country labels'],

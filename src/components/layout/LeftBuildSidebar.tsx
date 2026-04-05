@@ -23,20 +23,9 @@ export const LeftBuildSidebar = () => {
 
   return (
     <div className="absolute bottom-5 left-4 top-28 z-20 w-[300px]">
-      <OrnatePanel className="h-full" subtitle="Drag onto the map or click once to enter place mode." title="Build Palette" tone="hero">
+      <OrnatePanel className="h-full" subtitle="Drag onto the map or click once to enter place mode." title="Build Palette">
         <div className="flex h-full flex-col gap-4 px-4 py-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="feature-card">
-              <div className="feature-card__label">Recent Types</div>
-              <div className="feature-card__value text-base">{recentNodeTypes.length}</div>
-            </div>
-            <div className="feature-card">
-              <div className="feature-card__label">Enabled Templates</div>
-              <div className="feature-card__value text-base">{templateLibrary.filter((template) => template.enabled).length}</div>
-            </div>
-          </div>
-
-          <label className="relative block">
+          <label className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-frost/35" size={16} />
             <input className="ornate-input pl-10" onChange={(event) => setQuery(event.target.value)} placeholder="Search node types" value={query} />
           </label>
@@ -51,7 +40,7 @@ export const LeftBuildSidebar = () => {
                 }
                 const Icon = resolveIcon(template.icon);
                 return (
-                  <button key={template.id} className="palette-button min-h-[42px]" onClick={() => setPlacementNodeType(template.type)} type="button">
+                  <button key={template.id} className="palette-button" onClick={() => setPlacementNodeType(template.type)} type="button">
                     <Icon size={15} />
                     {template.label}
                   </button>
@@ -81,16 +70,13 @@ export const LeftBuildSidebar = () => {
                           }}
                           title={template.description}
                         >
-                          <div className="flex items-start gap-3">
-                            <div className="rounded-[16px] border border-brass/25 bg-obsidian/80 p-2.5 text-brass">
+                          <div className="flex items-center gap-3">
+                            <div className="rounded-full border border-brass/25 bg-obsidian/80 p-2 text-brass">
                               <Icon size={16} />
                             </div>
-                            <div className="min-w-0">
+                            <div>
                               <div className="text-sm font-semibold text-parchment">{template.label}</div>
-                              <div className="mt-1 text-xs leading-5 text-frost/60">{template.description}</div>
-                              <div className="mt-2">
-                                <span className="info-chip">{template.section}</span>
-                              </div>
+                              <div className="text-xs text-frost/60">{template.description}</div>
                             </div>
                           </div>
                         </div>
