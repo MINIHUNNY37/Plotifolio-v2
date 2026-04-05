@@ -10,6 +10,7 @@ export const BottomLeftAssumptionPanel = () => {
   const { activeScenarioId, scenarios, setHighlights } = useScenarioStore();
   const scenario = scenarios.find((candidate) => candidate.metadata.id === activeScenarioId) ?? scenarios[0];
   const metrics = getScenarioSummaryMetrics(scenario);
+  const pinnedCount = scenario.assumptions.filter((assumption) => assumption.pinned).length;
 
   return (
     <div className="absolute bottom-5 left-4 z-20 w-[420px]">
@@ -21,9 +22,24 @@ export const BottomLeftAssumptionPanel = () => {
         }
         subtitle="Assumptions, recent edits, warnings, and scenario notes stay visible while you work."
         title="Assumptions & Events"
+        tone="hero"
       >
         {!collapsed ? (
           <div className="max-h-[360px] space-y-4 overflow-y-auto px-4 py-4">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="feature-card">
+                <div className="feature-card__label">Assumptions</div>
+                <div className="feature-card__value text-base">{scenario.assumptions.length}</div>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card__label">Pinned</div>
+                <div className="feature-card__value text-base">{pinnedCount}</div>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card__label">Warnings</div>
+                <div className="feature-card__value text-base">{metrics.warnings.length}</div>
+              </div>
+            </div>
             <AssumptionEditor />
             <div>
               <div className="mb-2 text-[10px] uppercase tracking-[0.24em] text-frost/50">Warnings</div>

@@ -2,6 +2,7 @@ import { Clock3, Copy, Filter, Map, Plus } from 'lucide-react';
 import { useDeferredValue, useState } from 'react';
 import { useScenarioStore } from '../../store/useScenarioStore';
 import { formatDateTime } from '../../utils/format';
+import { PageLayoutShell } from '../layout/PageLayoutShell';
 import { OrnatePanel } from '../ui/OrnatePanel';
 
 export const ScenarioLibraryView = () => {
@@ -28,89 +29,114 @@ export const ScenarioLibraryView = () => {
     const matchesSector = sectorFilter === 'All' || scenario.metadata.sector === sectorFilter;
     return matchesSearch && matchesSector;
   });
+  const totalCountries = new Set(scenarios.flatMap((scenario) => scenario.metadata.countries)).size;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(199,168,106,0.1),transparent_24%),linear-gradient(180deg,#0d1724,#070b11)] px-6 py-6 text-frost">
-      <div className="mx-auto max-w-[1400px] space-y-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.26em] text-brass/80">Scenario Library</div>
-            <h1 className="mt-2 font-display text-4xl uppercase tracking-[0.18em] text-parchment">Investor World Map</h1>
-            <p className="mt-3 max-w-3xl text-sm text-frost/70">
-              Build scenario-based operating maps for public companies, then inspect debt, cash, geography, and risk changes without leaving the command screen.
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <button className="command-pill" onClick={() => setActiveView('settings')} type="button">
-              <Filter size={14} />
-              Templates & Settings
-            </button>
-            <button className="command-pill command-pill-primary" onClick={() => setModalOpen(true)} type="button">
-              <Plus size={14} />
-              New Scenario
-            </button>
-          </div>
+    <PageLayoutShell
+      actions={
+        <>
+          <button className="command-pill" onClick={() => setActiveView('settings')} type="button">
+            <Filter size={14} />
+            Templates & Settings
+          </button>
+          <button className="command-pill command-pill-primary" onClick={() => setModalOpen(true)} type="button">
+            <Plus size={14} />
+            New Scenario
+          </button>
+        </>
+      }
+      description="Build scenario-based operating maps for public companies, then inspect debt, cash, geography, and risk changes without leaving the command screen."
+      eyebrow="Scenario Library"
+      maxWidthClassName="max-w-[1440px]"
+      stats={[
+        { label: 'Scenarios', value: `${scenarios.length}` },
+        { label: 'Visible Results', value: `${filteredScenarios.length}` },
+        { label: 'Countries Modeled', value: `${totalCountries}` },
+      ]}
+      title="Investor World Map"
+    >
+      <OrnatePanel subtitle="Search and filter by company, sector, scenario type, or country exposure." title="Library Controls" tone="hero">
+        <div className="grid gap-4 px-4 py-4 lg:grid-cols-[1.6fr_0.9fr_auto]">
+          <input className="ornate-input" onChange={(event) => setSearch(event.target.value)} placeholder="Search scenarios, companies, or countries" value={search} />
+          <select className="ornate-input" value={sectorFilter} onChange={(event) => setSectorFilter(event.target.value)}>
+            <option value="All">All sectors</option>
+            {Array.from(new Set(scenarios.map((scenario) => scenario.metadata.sector))).map((sector) => (
+              <option key={sector} value={sector}>
+                {sector}
+              </option>
+            ))}
+          </select>
+          <button className="command-pill justify-center lg:min-w-[180px]" onClick={() => setActiveView('compare')} type="button">
+            <Map size={14} />
+            Compare Selected
+          </button>
         </div>
+      </OrnatePanel>
 
-        <OrnatePanel subtitle="Search and filter by company, sector, scenario type, or country exposure." title="Library Controls">
-          <div className="grid gap-4 px-4 py-4 md:grid-cols-[2fr_1fr_auto]">
-            <input className="ornate-input" onChange={(event) => setSearch(event.target.value)} placeholder="Search scenarios, companies, or countries" value={search} />
-            <select className="ornate-input" value={sectorFilter} onChange={(event) => setSectorFilter(event.target.value)}>
-              <option value="All">All sectors</option>
-              {Array.from(new Set(scenarios.map((scenario) => scenario.metadata.sector))).map((sector) => (
-                <option key={sector} value={sector}>
-                  {sector}
-                </option>
-              ))}
-            </select>
-            <button className="command-pill" onClick={() => setActiveView('compare')} type="button">
-              <Map size={14} />
-              Compare Selected
-            </button>
-          </div>
-        </OrnatePanel>
-
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filteredScenarios.map((scenario) => (
-            <article
-              key={scenario.metadata.id}
-              className="rounded-[28px] border border-brass/20 bg-[linear-gradient(180deg,rgba(17,34,53,0.86),rgba(7,11,17,0.94))] p-5 text-left shadow-panel transition-transform hover:-translate-y-1"
-              onClick={() => setActiveScenario(scenario.metadata.id)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  setActiveScenario(scenario.metadata.id);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-            >
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {filteredScenarios.map((scenario) => (
+          <article
+            key={scenario.metadata.id}
+            className="hero-card cursor-pointer transition-transform hover:-translate-y-1"
+            onClick={() => setActiveScenario(scenario.metadata.id)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setActiveScenario(scenario.metadata.id);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <div className="hero-card__body">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="font-display text-xl uppercase tracking-[0.12em] text-parchment">{scenario.metadata.name}</div>
-                  <div className="mt-1 text-xs uppercase tracking-[0.22em] text-frost/55">
-                    {scenario.metadata.companyName} | {scenario.metadata.scenarioType}
-                  </div>
+                <div className="space-y-2">
+                  <div className="page-kicker">{scenario.metadata.companyTicker} | {scenario.metadata.scenarioType}</div>
+                  <div className="font-display text-2xl uppercase tracking-[0.12em] text-parchment">{scenario.metadata.name}</div>
+                  <div className="text-sm text-frost/62">{scenario.metadata.companyName}</div>
                 </div>
-                <div className="rounded-full border border-brass/20 bg-black/18 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-brass">
-                  {scenario.metadata.status}
+                <div className="info-chip">{scenario.metadata.status}</div>
+              </div>
+
+              <p className="mt-5 text-sm leading-6 text-frost/72">{scenario.metadata.assumptionsSummary}</p>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <div className="feature-card">
+                  <div className="feature-card__label">Scenario Type</div>
+                  <div className="feature-card__value text-base">{scenario.metadata.scenarioType}</div>
+                </div>
+                <div className="feature-card">
+                  <div className="feature-card__label">Countries</div>
+                  <div className="feature-card__value text-base">{scenario.metadata.countries.length}</div>
+                </div>
+                <div className="feature-card">
+                  <div className="feature-card__label">Last Updated</div>
+                  <div className="feature-card__value text-base">{formatDateTime(scenario.metadata.updatedAt)}</div>
                 </div>
               </div>
-              <p className="mt-4 text-sm text-frost/70">{scenario.metadata.assumptionsSummary}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
+
+              <div className="mt-5 flex flex-wrap gap-2">
                 {scenario.metadata.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-brass/15 bg-black/18 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-frost/55">
+                  <span key={tag} className="info-chip">
                     {tag}
                   </span>
                 ))}
               </div>
-              <div className="mt-5 flex items-center justify-between text-xs text-frost/55">
-                <span className="inline-flex items-center gap-1">
+
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-frost/55">
                   <Clock3 size={13} />
                   {formatDateTime(scenario.metadata.updatedAt)}
                 </span>
-                <div className="flex gap-2">
-                  <button className="command-pill" onClick={(event) => { event.stopPropagation(); duplicateScenario(scenario.metadata.id); }} type="button">
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className="command-pill"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      duplicateScenario(scenario.metadata.id);
+                    }}
+                    type="button"
+                  >
                     <Copy size={14} />
                     Duplicate
                   </button>
@@ -134,18 +160,22 @@ export const ScenarioLibraryView = () => {
                   </button>
                 </div>
               </div>
-            </article>
-          ))}
-        </div>
+            </div>
+          </article>
+        ))}
       </div>
 
       {modalOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-[28px] border border-brass/25 bg-midnight/96 p-6 shadow-panel">
-            <h2 className="font-display text-xl uppercase tracking-[0.22em] text-parchment">Create New Scenario</h2>
-            <p className="mt-2 text-sm text-frost/70">Clone the active graph into a fresh case and start modeling the delta immediately.</p>
-            <input className="ornate-input mt-4" onChange={(event) => setNewScenarioName(event.target.value)} placeholder="Scenario name" value={newScenarioName} />
-            <div className="mt-5 flex justify-end gap-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 backdrop-blur-sm">
+          <div className="modal-shell max-w-xl">
+            <div className="modal-shell__header">
+              <h2 className="modal-shell__title">Create New Scenario</h2>
+              <p className="modal-shell__subtitle">Clone the active graph into a fresh case and start modeling the delta immediately.</p>
+            </div>
+            <div className="modal-shell__body">
+              <input className="ornate-input" onChange={(event) => setNewScenarioName(event.target.value)} placeholder="Scenario name" value={newScenarioName} />
+            </div>
+            <div className="modal-shell__footer">
               <button className="command-pill" onClick={() => setModalOpen(false)} type="button">
                 Cancel
               </button>
@@ -164,6 +194,6 @@ export const ScenarioLibraryView = () => {
           </div>
         </div>
       ) : null}
-    </div>
+    </PageLayoutShell>
   );
 };
