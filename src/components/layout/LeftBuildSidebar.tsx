@@ -26,12 +26,12 @@ export const LeftBuildSidebar = () => {
       <OrnatePanel className="h-full" subtitle="Drag onto the map or click once to enter place mode." title="Build Palette">
         <div className="flex h-full flex-col gap-4 px-4 py-4">
           <label className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-frost/35" size={16} />
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--st-text-soft)]" size={16} />
             <input className="ornate-input pl-10" onChange={(event) => setQuery(event.target.value)} placeholder="Search node types" value={query} />
           </label>
 
           <div>
-            <div className="mb-2 text-[10px] uppercase tracking-[0.24em] text-frost/50">Recently used</div>
+            <div className="panel-section-kicker mb-2">Recently used</div>
             <div className="grid grid-cols-2 gap-2">
               {recentNodeTypes.map((type) => {
                 const template = templateLibrary.find((candidate) => candidate.type === type);
@@ -50,9 +50,12 @@ export const LeftBuildSidebar = () => {
           </div>
 
           <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+            {filteredTemplates.filter((template) => template.enabled).length === 0 ? (
+              <div className="empty-state-card">No matching node templates yet. Try a broader search or clear the filter.</div>
+            ) : null}
             {sections.map((section) => (
               <div key={section}>
-                <div className="mb-2 text-[10px] uppercase tracking-[0.24em] text-frost/50">{section}</div>
+                <div className="panel-section-kicker mb-2">{section}</div>
                 <div className="space-y-2">
                   {filteredTemplates
                     .filter((template) => template.section === section && template.enabled)
@@ -71,12 +74,12 @@ export const LeftBuildSidebar = () => {
                           title={template.description}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="rounded-full border border-brass/25 bg-obsidian/80 p-2 text-brass">
+                            <div className="icon-surface rounded-full">
                               <Icon size={16} />
                             </div>
                             <div>
-                              <div className="text-sm font-semibold text-parchment">{template.label}</div>
-                              <div className="text-xs text-frost/60">{template.description}</div>
+                              <div className="text-sm font-semibold text-[var(--st-text)]">{template.label}</div>
+                              <div className="text-xs leading-relaxed text-[var(--st-text-muted)]">{template.description}</div>
                             </div>
                           </div>
                         </div>

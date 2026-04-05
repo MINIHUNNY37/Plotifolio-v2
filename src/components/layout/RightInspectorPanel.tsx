@@ -25,32 +25,32 @@ export const RightInspectorPanel = () => {
     <div className="space-y-3">
       <div className="grid gap-3">
         <label className="inspector-field">
-          <span>Title</span>
+          <span className="panel-section-kicker">Title</span>
           <input className="ornate-input" value={selectedNode?.title ?? ''} onChange={(event) => selectedNode && updateNodeField(selectedNode.id, 'title', event.target.value)} />
         </label>
         <label className="inspector-field">
-          <span>Subtitle</span>
+          <span className="panel-section-kicker">Subtitle</span>
           <input className="ornate-input" value={selectedNode?.subtitle ?? ''} onChange={(event) => selectedNode && updateNodeField(selectedNode.id, 'subtitle', event.target.value)} />
         </label>
         <label className="inspector-field">
-          <span>Status</span>
+          <span className="panel-section-kicker">Status</span>
           <input className="ornate-input" value={selectedNode?.status ?? ''} onChange={(event) => selectedNode && updateNodeField(selectedNode.id, 'status', event.target.value)} />
         </label>
         <label className="inspector-field">
-          <span>Notes</span>
+          <span className="panel-section-kicker">Notes</span>
           <textarea className="ornate-input min-h-24" value={selectedNode?.notes ?? ''} onChange={(event) => selectedNode && updateNodeField(selectedNode.id, 'notes', event.target.value)} />
         </label>
       </div>
       {selectedNode ? (
-        <div className="space-y-2 rounded-2xl border border-brass/15 bg-black/18 p-3">
+        <div className="surface-card space-y-2 p-3">
           <div className="flex items-center justify-between">
-            <div className="text-[10px] uppercase tracking-[0.24em] text-frost/50">Reset to parent</div>
+            <div className="panel-section-kicker">Reset to parent</div>
             <button className="command-pill" onClick={() => resetNodeFieldToParent(selectedNode.id, 'metadata')} type="button">
               <RotateCcw size={14} />
               Metadata
             </button>
           </div>
-          <div className="text-xs text-frost/65">Use field-level reset buttons in a backend-integrated version to restore individual parent values.</div>
+          <div className="text-xs leading-relaxed text-[var(--st-text-muted)]">Use field-level reset buttons in a backend-integrated version to restore individual parent values.</div>
         </div>
       ) : null}
     </div>
@@ -59,11 +59,11 @@ export const RightInspectorPanel = () => {
   const renderEdgeInspector = () => (
     <div className="space-y-3">
       <label className="inspector-field">
-        <span>Label</span>
+        <span className="panel-section-kicker">Label</span>
         <input className="ornate-input" value={selectedEdge?.label ?? ''} onChange={(event) => selectedEdge && updateEdgeField(selectedEdge.id, 'label', event.target.value)} />
       </label>
       <label className="inspector-field">
-        <span>Amount</span>
+        <span className="panel-section-kicker">Amount</span>
         <input
           className="ornate-input"
           type="number"
@@ -72,7 +72,7 @@ export const RightInspectorPanel = () => {
         />
       </label>
       <label className="inspector-field">
-        <span>Notes</span>
+        <span className="panel-section-kicker">Notes</span>
         <textarea className="ornate-input min-h-24" value={selectedEdge?.notes ?? ''} onChange={(event) => selectedEdge && updateEdgeField(selectedEdge.id, 'notes', event.target.value)} />
       </label>
       {selectedEdge ? (
@@ -86,17 +86,17 @@ export const RightInspectorPanel = () => {
 
   const renderScenarioOverview = () => (
     <div className="space-y-3">
-      <div className="rounded-2xl border border-brass/15 bg-black/18 p-3">
-        <div className="text-[10px] uppercase tracking-[0.24em] text-frost/50">Scenario Overview</div>
-        <div className="mt-2 text-sm text-frost/75">{scenario.metadata.assumptionsSummary}</div>
+      <div className="left-accent-callout">
+        <div className="panel-section-kicker mb-2">Scenario Overview</div>
+        <div className="text-sm leading-relaxed text-[var(--st-text)]">{scenario.metadata.assumptionsSummary}</div>
       </div>
       <label className="inspector-field">
-        <span>Scenario notes</span>
+        <span className="panel-section-kicker">Scenario notes</span>
         <textarea className="ornate-input min-h-36" value={scenario.notes} onChange={(event) => updateScenarioNotes(event.target.value)} />
       </label>
-      <div className="rounded-2xl border border-brass/15 bg-black/18 p-3">
-        <div className="text-[10px] uppercase tracking-[0.24em] text-frost/50">Recent changes</div>
-        <div className="mt-2 space-y-2 text-sm text-frost/70">
+      <div className="surface-card p-3">
+        <div className="panel-section-kicker">Recent changes</div>
+        <div className="mt-2 space-y-2 text-sm text-[var(--st-text-muted)]">
           {scenario.changeLog.slice(0, 5).map((entry) => (
             <div key={entry.id}>{entry.message}</div>
           ))}
@@ -109,7 +109,7 @@ export const RightInspectorPanel = () => {
     <div className="absolute bottom-5 right-4 top-28 z-20 w-[360px]">
       <OrnatePanel className="h-full" subtitle="Hover for quick context, edit here for full detail." title="Inspector">
         <div className="flex h-full flex-col">
-          <div className="flex gap-1 overflow-x-auto border-b border-brass/15 px-3 py-2">
+          <div className="flex gap-1 overflow-x-auto border-b border-white/5 px-3 py-2">
             {tabs.map((item) => (
               <button key={item} className={item === tab ? 'inspector-tab inspector-tab-active' : 'inspector-tab'} onClick={() => setTab(item)} type="button">
                 {item}
@@ -118,7 +118,7 @@ export const RightInspectorPanel = () => {
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4">
             {selection.nodeIds.length > 1 ? (
-              <div className="rounded-2xl border border-brass/15 bg-black/18 p-4 text-sm text-frost/70">
+              <div className="empty-state-card">
                 Batch edit is active for {selection.nodeIds.length} nodes. Use the selection overlay on the canvas to align, group, duplicate, or delete them.
               </div>
             ) : selectedNode ? (

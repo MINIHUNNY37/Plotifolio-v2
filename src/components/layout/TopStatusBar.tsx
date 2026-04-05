@@ -35,11 +35,12 @@ export const TopStatusBar = () => {
   const metrics = getScenarioSummaryMetrics(scenario);
 
   return (
-    <header className="absolute inset-x-4 top-4 z-30 rounded-[26px] border border-brass/28 bg-[linear-gradient(180deg,rgba(17,34,53,0.96),rgba(7,11,17,0.96))] px-4 py-3 shadow-panel backdrop-blur-xl">
+    <header className="premium-panel-surface absolute inset-x-4 top-4 z-30 rounded-[20px] px-4 py-3">
       <div className="flex flex-wrap items-center gap-3">
         <div className="mr-2 min-w-[220px]">
-          <div className="font-display text-lg uppercase tracking-[0.18em] text-parchment">{scenario.metadata.name}</div>
-          <div className="text-xs uppercase tracking-[0.22em] text-frost/60">
+          <div className="panel-section-kicker mb-1">Active Scenario</div>
+          <div className="font-display text-lg font-extrabold uppercase tracking-[0.16em] text-[var(--st-text)]">{scenario.metadata.name}</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-[var(--st-text-muted)]">
             {scenario.metadata.companyName} ({scenario.metadata.companyTicker}) | {scenario.metadata.scenarioType}
           </div>
         </div>
@@ -82,7 +83,7 @@ export const TopStatusBar = () => {
         />
 
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <div className="rounded-full border border-brass/18 bg-black/18 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-frost/60">
+          <div className="pill-tag">
             Last saved {formatDateTime(scenario.metadata.lastSavedAt)} | {scenario.metadata.saveState}
           </div>
           <button className="command-pill" onClick={() => setActiveView('compare')} type="button">

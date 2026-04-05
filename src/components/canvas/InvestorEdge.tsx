@@ -22,8 +22,23 @@ export const InvestorEdge = ({
     return null;
   }
 
+  const mainOpacity = edgeData.dimmed ? 0.28 : edgeData.highlighted ? 0.98 : 0.88;
+  const haloOpacity = edgeData.dimmed ? 0.08 : edgeData.highlighted ? 0.28 : 0.14;
+
   return (
     <>
+      <BaseEdge
+        path={path}
+        style={{
+          stroke: edgeData.edge.styleConfig.stroke,
+          strokeDasharray: edgeData.edge.styleConfig.dashPattern,
+          strokeWidth: edgeData.edge.styleConfig.width + 3,
+          opacity: haloOpacity,
+          filter: `drop-shadow(0 0 10px ${edgeData.edge.styleConfig.glow})`,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+        }}
+      />
       <BaseEdge
         id={id}
         path={path}
@@ -31,8 +46,10 @@ export const InvestorEdge = ({
           stroke: edgeData.edge.styleConfig.stroke,
           strokeDasharray: edgeData.edge.styleConfig.dashPattern,
           strokeWidth: edgeData.edge.styleConfig.width,
-          filter: `drop-shadow(0 0 12px ${edgeData.edge.styleConfig.glow})`,
-          opacity: edgeData.dimmed ? 0.25 : 0.95,
+          filter: `drop-shadow(0 0 6px ${edgeData.edge.styleConfig.glow})`,
+          opacity: mainOpacity,
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
         }}
       />
       <FlowEdgePortal>

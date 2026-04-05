@@ -59,7 +59,7 @@ export const BottomRightCommandCluster = () => {
           </div>
 
           {filtersOpen ? (
-            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-brass/15 bg-black/18 p-3">
+            <div className="surface-card grid grid-cols-2 gap-2 p-3">
               {[
                 ['operationsOnly', 'Operations'],
                 ['liquidityOnly', 'Liquidity'],
@@ -77,7 +77,7 @@ export const BottomRightCommandCluster = () => {
           ) : null}
 
           {layersOpen ? (
-            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-brass/15 bg-black/18 p-3">
+            <div className="surface-card grid grid-cols-2 gap-2 p-3">
               {[
                 ['showBackgroundMap', 'Background map'],
                 ['showCountryLabels', 'Country labels'],
@@ -100,7 +100,7 @@ export const BottomRightCommandCluster = () => {
             </div>
           ) : null}
 
-          <div className="grid grid-cols-5 gap-1 rounded-2xl border border-brass/15 bg-black/18 p-2">
+          <div className="surface-card grid grid-cols-5 gap-1 p-2">
             {TIME_HORIZONS.map((horizon, index) => (
               <button
                 key={horizon}

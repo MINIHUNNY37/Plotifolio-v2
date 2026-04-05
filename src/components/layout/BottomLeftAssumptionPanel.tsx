@@ -26,19 +26,23 @@ export const BottomLeftAssumptionPanel = () => {
           <div className="max-h-[360px] space-y-4 overflow-y-auto px-4 py-4">
             <AssumptionEditor />
             <div>
-              <div className="mb-2 text-[10px] uppercase tracking-[0.24em] text-frost/50">Warnings</div>
+              <div className="panel-section-kicker mb-2">Warnings</div>
               <div className="space-y-2">
-                {metrics.warnings.map((warning) => (
-                  <button
-                    key={warning.id}
-                    className="summary-row text-left"
-                    onClick={() => setHighlights(warning.nodeId ? [warning.nodeId] : [], warning.edgeId ? [warning.edgeId] : [])}
-                    type="button"
-                  >
-                    <span>{warning.title}</span>
-                    <strong>View</strong>
-                  </button>
-                ))}
+                {metrics.warnings.length === 0 ? (
+                  <div className="empty-state-card">No active warnings in this scenario. Assumptions and linked events are currently clean.</div>
+                ) : (
+                  metrics.warnings.map((warning) => (
+                    <button
+                      key={warning.id}
+                      className="summary-row text-left"
+                      onClick={() => setHighlights(warning.nodeId ? [warning.nodeId] : [], warning.edgeId ? [warning.edgeId] : [])}
+                      type="button"
+                    >
+                      <span>{warning.title}</span>
+                      <strong>View</strong>
+                    </button>
+                  ))
+                )}
               </div>
             </div>
           </div>
